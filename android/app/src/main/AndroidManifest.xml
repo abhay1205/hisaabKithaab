@@ -8,7 +8,7 @@
 
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
-    
+    <uses-permission android:name="android.permission.WRITE_SMS" />
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="paymng"
@@ -47,11 +47,18 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <receiver android:name=".SmsReceiver">
+
+        <receiver android:name=".SmsBroadcastReceiver" android:exported="true" >
+            <intent-filter android:priority="999" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- <receiver android:name=".SmsReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-        </receiver>
+        </receiver> -->
     </application>
 </manifest>

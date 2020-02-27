@@ -1,82 +1,105 @@
 package com.example.paymng;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
-import java.util.ArrayList;
-
-import java.lang.*;
-import java.util.List;
-
-import android.Manifest;
-import android.content.ContentResolver;
-import android.content.ContextWrapper;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.BatteryManager;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
-import android.os.Bundle;
-
 
 
 public class MainActivity extends FlutterActivity{
     private static final String CHANNEL = "com.example.paymng/sms";
 
-    public class SmsDataFormat{
-        String address, body;
+    private static MainActivity inst;
+    ArrayList<String> smsMessagesList = new ArrayList<>();
 
-        public SmsDataFormat(String address, String body){
-            address = this.address;
-            body = this.body;
-        }
+    public ArrayList<String> getSmsMessagesList() {
+        return smsMessagesList;
     }
+
+    public void setSmsMessagesList(ArrayList<String> smsMessagesList) {
+        this.smsMessagesList = smsMessagesList;
+    }
+
+
+
+    public static MainActivity instance() {
+        return inst;
+    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        inst = this;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
     }
 
-    public String Read_Sms(){
-        Cursor cursor = getContentResolver().query(Uri.parse("content://sms"), null, null, null, null);
-        cursor.moveToFirst();
+//    public String Read_Sms(){
+//        Cursor cursor = getContentResolver().query(Uri.parse("content://sms"), null, null, null, null);
+//        cursor.moveToFirst();
+//
+//        String smsMsg = cursor.getString(12);
+//        return smsMsg;
+//    }
+//
 
-        String smsMsg = cursor.getString(12);
-        return smsMsg;
-    }
+//
+//    public String refreshBox(){
+//        ContentResolver cResolver = getContentResolver();
+//        Cursor smsInboxCursor = cResolver.query(Uri.parse("content://sms/inbox"),
+//                null, null, null, null);
+//
+//        int indexBody = smsInboxCursor.getColumnIndex("body");
+//        int indexAddress = smsInboxCursor.getColumnIndex("address");
+//
+//        if(indexBody< 0 || !smsInboxCursor.moveToFirst()) return null;
+//
+//        do{
+//            String address = "Sms From : " + smsInboxCursor.getString(indexAddress) + "\n";
+//            String body = smsInboxCursor.getString(indexBody);
+//            String res = address + body;
+//             return res;
+//        }while (smsInboxCursor.moveToNext());
+//    }
 
-    public List<SmsDataFormat> refreshBox(){
-        ContentResolver cResolver = getContentResolver();
-        Cursor smsInboxCursor = cResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
+    public ArrayList<String> refreshSmsInbox() {
+        ContentResolver contentResolver = getContentResolver();
+        Cursor smsInboxCursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
         int indexBody = smsInboxCursor.getColumnIndex("body");
         int indexAddress = smsInboxCursor.getColumnIndex("address");
+        if (indexBody < 0 || !smsInboxCursor.moveToFirst()) return null;
 
-        if(indexBody< 0 || !smsInboxCursor.moveToFirst()) return null;
 
-        do{
-            String address = "Sms From : " + smsInboxCursor.getString(indexAddress);
-            String body = smsInboxCursor.getString(indexBody);
-            List<SmsDataFormat> smsDataFormatList = new ArrayList<>();
-            SmsDataFormat m = new SmsDataFormat(address, body);
-            smsDataFormatList.add(m);
-             return smsDataFormatList;
-        }while (smsInboxCursor.moveToNext());
+        do {
+            String str = "SMS From: " + smsInboxCursor.getString(indexAddress) +
+                    "\n" + smsInboxCursor.getString(indexBody) + "\n";
+            smsMessagesList.add(str);
+        } while (smsInboxCursor.moveToNext());
+
+
+
+        return smsMessagesList;
     }
 
-
-
+//    public void updateList(final String smsMessage) {
+//        smsMessagesList.add(0, smsMessage );
+//        smsMessagesList.notifyAll();
+//    }
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
@@ -86,12 +109,12 @@ public class MainActivity extends FlutterActivity{
                         (call, result) -> {
                             // Note: this method is invoked on the main thread.
                             // TODO
-                            if (call.method.equals("refreshBox")) {
+                            if (call.method.equals("refreshSmsInbox")) {
 //                                String msg = Read_Sms();
-                                List<SmsDataFormat> smslist = refreshBox();
+                                ArrayList<String> smsMessagesList1 = refreshSmsInbox();
 
-                                if (smslist != null) {
-                                    result.success(smslist);
+                                if (smsMessagesList1 != null) {
+                                    result.success(smsMessagesList1);
                                 } else {
                                     result.error("UNAVAILABLE", "Battery level not available.", null);
                                 }
