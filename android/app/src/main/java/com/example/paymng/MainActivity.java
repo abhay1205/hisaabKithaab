@@ -96,10 +96,10 @@ public class MainActivity extends FlutterActivity{
         return smsMessagesList;
     }
 
-//    public void updateList(final String smsMessage) {
-//        smsMessagesList.add(0, smsMessage );
-//        smsMessagesList.notifyAll();
-//    }
+    public void updateList(final String smsMessage) {
+        smsMessagesList.add(0, smsMessage );
+        smsMessagesList.notifyAll();
+    }
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -9,29 +10,53 @@ class TransactionList extends StatefulWidget {
 }
 
 class _TransactionListState extends State<TransactionList> {
+
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  // THE METHOD CHANNEL TO GET JAVA CODE RESPONSE IN FLUTTER
   static const platform = const MethodChannel("com.example.paymng/sms");
-  List<dynamic> _sms = new List();
+
   
-  Future<void> _refreshInbox() async {
+  List<dynamic> _sms = new List();
+  int refresh =0;
+
+  void clearSms(){
+    _sms.clear();
+  }
+
+  Future<void> getAllSms() async {
+
     List<dynamic> sms = new List();
-    sms.add("Hello");
+    // _sms.clear();
+    sms.clear();
     try {
-      sms.addAll(await platform
-          .invokeMethod('refreshSmsInbox'));  // replace the result data structure
+      sms.addAll(await platform.invokeMethod(
+          'refreshSmsInbox')); // replace the result data structure
     } on PlatformException catch (e) {
       print("error getting messages\n");
     }
 
     setState(() {
-      _sms = sms;
+      // this is set as when the sms data is send to db and read back,then no duplicates will there (assumption) 
+      // if(refresh ==0 || _sms[0] != sms [0]  ){
+        _sms = sms;
+      // R
     });
-    print("length:" + sms.length.toString());
+    
+  }
+  Future<Null> refreshBox() async{
+
+    refreshKey.currentState?.show();
+    await Future.delayed(Duration(seconds: 2));
+
+    getAllSms();
+
   }
 
   @override
   void initState() {
-    _refreshInbox();
     super.initState();
+    clearSms();
   }
 
   Widget balanceStatus() {
@@ -85,11 +110,8 @@ class _TransactionListState extends State<TransactionList> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueAccent,
-      appBar: AppBar(
+  Widget appbar(){
+    return AppBar(
         elevation: 0,
         titleSpacing: 10,
         backgroundColor: Colors.blueAccent,
@@ -108,33 +130,58 @@ class _TransactionListState extends State<TransactionList> {
               child: Text("sms inbox: ${_sms.length} ",
                   style: TextStyle(color: Colors.white)))
         ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-        child: ListView.builder(
-            itemCount: _sms.length,
-            itemBuilder: (context, index) {
-              return Card(
-                elevation: 10,
-                child: ListTile(
-                  leading: Text(
-                    "Rs. ${index+1}",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+      );
+  }
+
+  Widget transactionList(){
+    return RefreshIndicator(
+      onRefresh: refreshBox,
+      key: refreshKey,
+          child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+          child: ListView.builder(
+              itemCount: _sms.length,
+              itemBuilder: (context, index) {
+
+                String msg = _sms[index];
+                try{
+                  print(msg.substring(
+                    msg.indexOf("Rs.")
+                    , msg.indexOf("to") ));
+                }catch(e){
+                  print("error");
+                }
+                
+                return Card(
+                  elevation: 10,
+                  child: ListTile(
+                    leading: Text(
+                      "10",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    title: Text(_sms[index]),
+                    subtitle: Text("Transaction ID"),
+                    isThreeLine: true,
+                    trailing: Text("Date/Time"),
                   ),
-                  title: Text(_sms[index]),
-                  subtitle: Text("Transaction ID"),
-                  isThreeLine: true,
-                  trailing: Text("Date/Time"),
-                ),
-              );
-            }),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _refreshInbox,
-        label: Text("Refresh", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blueAccent,
-      ),
+                );
+              }),
+        ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blueAccent,
+      appBar: appbar(),
+      body: transactionList(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: _refreshInbox,
+      //   label: Text("Refresh", style: TextStyle(color: Colors.white)),
+      //   backgroundColor: Colors.blueAccent,
+      // ),
     );
   }
 }

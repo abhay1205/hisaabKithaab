@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paymng/AppBarWidgets/DrawerPage.dart';
 import 'package:paymng/TransactionPagesView/TransactionList.dart';
+import 'package:paymng/TransactionPagesView/payTMlistview.dart';
+import 'package:paymng/TransactionPagesView/upiListView.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage>
             isScrollable: true,
             controller: _tabController,
             tabs: [
-              Text("Paytm",
+              Text("PayTM",
                   style: TextStyle(color: Colors.white, fontSize: 20)),
               Text("UPI", style: TextStyle(color: Colors.white, fontSize: 20)),
               Text("G-Pay",
@@ -45,11 +47,11 @@ class _HomePageState extends State<HomePage>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          TransactionList(),
-          TransactionList(),
-          TransactionList(),
-          TransactionList(),
-          TransactionList(),
+          PayTMtransactions(),
+          UpiList(),
+          Center(child: Text("Coming in future")),
+          Center(child: Text("Coming in future")),
+          Center(child: Text("Coming in future")),
         ],
       ),
       drawer: DrawerPage(),
