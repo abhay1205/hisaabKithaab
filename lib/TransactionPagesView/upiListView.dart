@@ -37,6 +37,7 @@ class _UpiListState extends State<UpiList> {
       // this is set as when the sms data is send to db and read back,then no duplicates will there (assumption)
       // if(refresh ==0 || _sms[0] != sms [0]  ){
       _sms = sms;
+      _sms.toSet().toList();
       // R
     });
   }
@@ -52,7 +53,6 @@ class _UpiListState extends State<UpiList> {
   void initState() {
     super.initState();
     getAllSms();
-    clearSms();
   }
 
 
@@ -69,7 +69,9 @@ class _UpiListState extends State<UpiList> {
                 elevation: 10,
                 child: ListTile(
                   // CREDIT/DEBIT
-                  leading: Text( msg.contains("credited") ? "Credit" : "Debit"),
+                  leading:  msg.contains("credited") ? 
+                  Text("Credit", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)) : 
+                  Text("Debit", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
                   // AMOUNT
                   title: Text(msg.substring(msg.indexOf("Rs"), msg.indexOf("on"))),
                   // TRANSACTION ID
@@ -82,7 +84,7 @@ class _UpiListState extends State<UpiList> {
                   trailing: Text(msg.substring(
                       msg.indexOf(" on") + 3,
                       msg.indexOf(" on") + 11
-                      )),
+                      ), style: TextStyle(color: Colors.blue)),
                 ),
               )
             : SizedBox(
