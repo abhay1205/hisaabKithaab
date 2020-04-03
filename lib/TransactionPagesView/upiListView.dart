@@ -64,28 +64,36 @@ class _UpiListState extends State<UpiList> {
         String msg = _sms[index];
 
         return (msg.contains("SBI UPI") && msg.contains("A/c")) 
-            ? Card(
-              margin: EdgeInsets.only(top: 5, bottom:5),
-                elevation: 10,
-                child: ListTile(
-                  // CREDIT/DEBIT
-                  leading:  msg.contains("credited") ? 
-                  Text("Credit", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)) : 
-                  Text("Debit", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
-                  // AMOUNT
-                  title: Text(msg.substring(msg.indexOf("Rs"), msg.indexOf("on"))),
-                  // TRANSACTION ID
-                  subtitle: Text(msg.substring(
-                          msg.indexOf("Ref"), msg.indexOf("Ref") + 19))
-                      ,
-                  isThreeLine: true,
-                  
-                  // DATE TIME
-                  trailing: Text(msg.substring(
-                      msg.indexOf(" on") + 3,
-                      msg.indexOf(" on") + 11
-                      ), style: TextStyle(color: Colors.blue)),
-                ),
+            ? Container(
+                  margin: EdgeInsets.only(top: 5, bottom:5),
+                   decoration: BoxDecoration(
+                     border: Border.all(color: Colors.cyan, width: 2),
+                     borderRadius: BorderRadius.circular(30),
+                    // gradient: LinearGradient(
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    //   stops: [0.0, 0.2, 0.6, 0.9],
+                    //   colors: [Colors.amber[400], Colors.amber[200], Colors.amber[100], Colors.white])
+                  ),
+                  child: ListTile(
+                    // CREDIT/DEBIT
+                    leading:  msg.contains("credited") ? 
+                    Text("Credit", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)) : 
+                    Text("Debit", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+                    // AMOUNT
+                    title: Text(msg.substring(msg.indexOf("Rs"), msg.indexOf("on")), textAlign: TextAlign.center,),
+                    // TRANSACTION ID
+                    subtitle: Text(msg.substring(
+                            msg.indexOf("Ref"), msg.indexOf("Ref") + 19), textAlign: TextAlign.center,)
+                        ,
+                    isThreeLine: true,
+                    
+                    // DATE TIME
+                    trailing: Text(msg.substring(
+                        msg.indexOf(" on") + 3,
+                        msg.indexOf(" on") + 11
+                        ), style: TextStyle(color: Colors.cyan[400])),
+                  ),
               )
             : SizedBox(
                 height: 0,

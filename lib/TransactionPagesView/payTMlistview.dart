@@ -20,6 +20,7 @@ class _PayTMtransactionsState extends State<PayTMtransactions> {
   static const platform = const MethodChannel("com.example.paymng/sms");
 
   List<dynamic> _sms = new List();
+  List<dynamic> _final = new List();
   int refresh = 0;
 
   Future<void> getAllSms() async {
@@ -37,7 +38,7 @@ class _PayTMtransactionsState extends State<PayTMtransactions> {
       // this is set as when the sms data is send to db and read back,then no duplicates will there (assumption)
       // if(refresh ==0 || _sms[0] != sms [0]  ){
       _sms = sms;
-      _sms.toSet().toList();
+      _final =_sms.toSet().toList();
       // R
     });
   }
@@ -93,50 +94,78 @@ class _PayTMtransactionsState extends State<PayTMtransactions> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: _sms.length,
+      itemCount: _final.length,
       itemBuilder: (context, index) {
-        String msg = _sms[index];
+        String msg = _final[index];
         print(_sms.length);
+        print(_final.length);
         return (msg.contains("-iPaytm") || msg.contains("-IPAYTM")) &&
                 msg.contains("visit")
-            ? Card(
-              margin: EdgeInsets.only(top: 5, bottom:5),
-                elevation: 10,
-                child: ListTile(
-                  // AMOUNT
-                  leading: Text( index.toString(),
-                    // msg.contains("to")
-                    //     ? msg
-                    //         .substring(msg.indexOf("Rs."), msg.indexOf(" to"))
-                    //         .replaceFirst("transferred", "")
-                    //     : msg.substring(
-                    //         msg.indexOf("Rs."), msg.indexOf("Rs.") + 6),
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+            ? Container(
+              margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.cyan, width: 2),
+                    borderRadius: BorderRadius.circular(30),
+                    // gradient: LinearGradient(
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    //   stops: [0.0, 0.2, 0.6, 0.9],
+                    //   colors: [Colors.amber[400], Colors.amber[200], Colors.amber[100], Colors.white])
                   ),
-                  // SENDER
-                  title: Text(
-                    msg.substring(
-                      msg.indexOf(" to") + 4,
-                      msg.contains("on")
-                          ? msg.indexOf(" on")
-                          : msg.indexOf(" at"))),
-                  // TRANSACTION ID
-                  subtitle: msg.contains("Ref:")
-                      ? Text(msg.substring(
-                          msg.indexOf("Ref:"), msg.indexOf("Ref:") + 16))
-                      : Text("Unknown"),
-                  isThreeLine: true,
-                  
-                  // DATE TIME
-                  trailing: Text(msg.substring(
-                      msg.contains("on")
-                          ? msg.indexOf(" on") + 3
-                          : msg.indexOf("at") + 2,
-                      msg.contains("on")
-                          ? msg.indexOf(" on") + 25
-                          : msg.indexOf("at") + 24
-                      ), style: TextStyle(color: Colors.blue),),
-                ),
+                  child: ListTile(
+                    // AMOUNT
+                    leading: 
+                      Text(msg.contains("to")
+                          ? msg
+                              .substring(msg.indexOf("Rs."), msg.indexOf(" to"))
+                              .replaceFirst("transferred", "")
+                          : msg.substring(
+                              msg.indexOf("Rs."), msg.indexOf("Rs.") + 6),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                    ),
+                    // SENDER
+                    title: Text( 
+                      msg.substring(
+                        msg.indexOf(" to") + 4,
+                        msg.contains("on")
+                            ? 
+                            msg.indexOf(" on")
+                            : 
+                            msg.indexOf(" at")
+                            ).toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black),),
+                    // TRANSACTION ID
+                    subtitle: msg.contains("Ref:")
+                        ? Text(
+                          msg.substring(
+                            msg.indexOf("Ref:"), msg.indexOf("Ref:") + 16),
+                            textAlign: TextAlign.center,)
+                        : Text("Unknown", textAlign: TextAlign.center,),
+                    isThreeLine: true,
+                    
+                    // DATE TIME
+                    trailing: Text(
+                      '\n' +
+                      msg.substring(
+                        msg.contains("on")
+                            ? msg.indexOf(" on") + 3
+                            : msg.indexOf("at") + 2,
+                        msg.contains("on")
+                            ? msg.indexOf(" on") + 16
+                            : msg.indexOf("at") + 15
+                        ) + '\n'
+                          + msg.substring(
+                            msg.contains("on")
+                            ? msg.indexOf(" on") + 16
+                            : msg.indexOf("at") + 15,
+                            msg.contains("on")
+                            ? msg.indexOf(" on") + 25
+                            : msg.indexOf("at") + 24
+                          ), 
+                          textAlign: TextAlign.right,
+                          style: TextStyle(color: Colors.cyan[400]),),
+                  ),
               )
             : SizedBox(
                 height: 0,

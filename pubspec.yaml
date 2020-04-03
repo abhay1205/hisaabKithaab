@@ -25,6 +25,14 @@ dependencies:
   cupertino_icons: ^0.1.2
   typicons_flutter: ^0.3.1
   font_awesome_flutter: ^8.7.0
+  flutter_auth_buttons: ^0.6.0
+  redux: ^4.0.0
+  flutter_redux: ^0.6.0
+  shared_preferences: ^0.5.6+3
+  redux_thunk: ^0.3.0
+  firebase_auth: ^0.15.5+3
+  google_sign_in: ^4.2.0
+  gradient_text: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -49,7 +57,7 @@ flutter:
     - asset/Smart Card.png
     - asset/searchpng.com-phonepe-icon.png
     - asset/google pay.png
-  #   - images/a_dot_ham.jpeg
+    - asset/Logo.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "820355521199",
+    "firebase_url": "https://paymng-10955.firebaseio.com",
+    "project_id": "paymng-10955",
+    "storage_bucket": "paymng-10955.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820355521199:android:ee9aec5c759b1886ab925a",
+        "android_client_info": {
+          "package_name": "com.example.paymng"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820355521199-mbus6aqageedsgct09vl1910s3nmsmql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.paymng",
+            "certificate_hash": "7eeb814dc7a450a37aa4e2a7c0310015f8dd9c7e"
+          }
+        },
+        {
+          "client_id": "820355521199-2s5h1gmt44vjfolns5kjivo6of072nmv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMcKziRgati7aF9hATl_Sq11aWwoBYPgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820355521199-2s5h1gmt44vjfolns5kjivo6of072nmv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
