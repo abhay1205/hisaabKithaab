@@ -6,7 +6,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:paymng/AppBarWidgets/DrawerPage.dart';
 import 'package:paymng/TransactionPagesView/payTMlistview.dart';
 import 'package:paymng/TransactionPagesView/upiListView.dart';
-import 'package:paymng/arch/mobileAuthService.dart';
+import 'package:paymng/arch/AuthService.dart';
 import 'package:paymng/arch/models/appState.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
 
@@ -35,6 +35,41 @@ class _HomePageState extends State<HomePage>
   void googlesignout(){
     _auth.signOut();
 
+  }
+
+  showLogOut() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            elevation: 5,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            title: Text('ALERT', style: TextStyle(color: Colors.cyan),),
+            content: Text('Are you sure, you want to log out', style: TextStyle(color: Colors.cyan),),
+            actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 0), 
+            actions: <Widget>[
+               RaisedButton(
+                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                color: Colors.cyan,
+                child: Text("No", style: TextStyle(color: Colors.white),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              SizedBox(width: 100,),
+              RaisedButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                color: Colors.cyan,
+                child: Text("Yes", style: TextStyle(color: Colors.white),),
+                onPressed: () {;
+                  AuthService().signOut();
+                  Navigator.of(context).pop();
+                },
+              ),
+             
+            ],
+          );
+        });
   }
 
   Widget barButtons() {
@@ -103,28 +138,6 @@ class _HomePageState extends State<HomePage>
                     fit: BoxFit.fitHeight,
                   )),
             ),
-            // GestureDetector(
-            //   onTap: (){
-            //     setState(() {
-            //       pageViewName = "G-Pay";
-            //     });
-            //   },
-            //     child: Container(
-            //        padding: EdgeInsets.only(bottom: 2),
-            //         decoration: pageViewName == "G-Pay"? BoxDecoration(
-            //           color: Colors.white,
-            //           borderRadius: BorderRadius.circular(10),
-            //           shape: BoxShape.rectangle
-            //         ): null,
-            //     height: 35,
-            //     child:  Image.asset(
-            //         'asset/google pay.png',
-            //         color: Colors.cyan[200],
-            //         colorBlendMode: BlendMode.colorBurn,
-            //         fit: BoxFit.fitHeight,
-            //       )
-            //   ),
-            // ),
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -226,8 +239,7 @@ class _HomePageState extends State<HomePage>
               actions: <Widget>[
                 IconButton(icon: Icon(Icons.refresh, color: Colors.white), onPressed: null),
                 IconButton(icon: Icon(Icons.power_settings_new, color: Colors.white,), onPressed: (){
-                  AuthService().signOut();
-                  googlesignout();
+                 showLogOut();
                 },)],
               iconTheme: IconThemeData(color: Colors.white),
               elevation: 2,
@@ -252,7 +264,7 @@ class _HomePageState extends State<HomePage>
               ),
               bottom: barButtons(),
             ),
-            drawer: DrawerPage(email: state.user.toString(),),
+            // drawer: DrawerPage(email: state.user.toString(),),
             body: bodyView(),
           );
         });

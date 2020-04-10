@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:paymng/arch/mobileAuthService.dart';
+import 'package:paymng/arch/AuthService.dart';
 import 'package:paymng/arch/models/appState.dart';
 import 'package:paymng/arch/redux/actions.dart';
 import 'package:paymng/arch/redux/reducer.dart';
 import 'package:paymng/pages/DashBoard.dart';
 import 'package:paymng/pages/HomePage.dart';
+import 'package:paymng/pages/LoginPage.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -27,11 +28,17 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(),
-        home: AuthService().handleAuth(),
+        home: LoginPage(), 
+        // AuthService().handleAuth(),
         routes: <String, WidgetBuilder>{
+          '/dash': (BuildContext context) => DashBoard(
+            onInit: (){
+              StoreProvider.of<AppState>(context).dispatch(getEmailPhoneAction);
+            }
+          ),
           '/home': (BuildContext context) => HomePage(
             onInit: (){
-              StoreProvider.of<AppState>(context).dispatch(getUserAction);
+              // StoreProvider.of<AppState>(context).dispatch(getUserAction);
             }
           ),
         },

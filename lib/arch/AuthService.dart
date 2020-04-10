@@ -17,7 +17,7 @@ class AuthService {
         if(snapshot.hasData){
           return HomePage(
             onInit: (){
-              StoreProvider.of<AppState>(context).dispatch(getUserAction);
+              // StoreProvider.of<AppState>(context).dispatch(getUserAction);
             }
           );
         }
