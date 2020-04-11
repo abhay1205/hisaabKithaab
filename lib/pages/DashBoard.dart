@@ -4,6 +4,7 @@ import 'package:paymng/arch/models/BusinessUser.dart';
 import 'package:paymng/arch/models/IndividualUser.dart';
 import 'package:paymng/arch/models/appState.dart';
 import 'package:paymng/arch/redux/actions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum UserType { Business, Individual }
 
@@ -20,13 +21,9 @@ class _DashBoardState extends State<DashBoard> {
   double screenSize;
   final _formKey = GlobalKey<FormState>();
   // INTIALIZING ALL THE VARIABLES
-  String _bName = '',
-      _bType = '',
-      _state = '',
-      _city = '',
-      _email = '',
-      _phoneNumber = '+91';
+  String _bName = '', _bType = '', _email = '', _phoneNumber = '+91';
   String bTypeDropdownValue, stateDropdownValue, cityDropdownValue;
+  bool _isRegistered;
 
   @override
   void initState() {
@@ -147,16 +144,16 @@ class _DashBoardState extends State<DashBoard> {
                   : SizedBox(
                       height: 0,
                     ),
-              Container(
-                // padding: const EdgeInsets.all(0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(child: _stateType()),
-                    SizedBox(width: 5),
-                    Expanded(child: _cityType())
-                  ],
-                ),
-              ),
+              // Container(
+              //   // padding: const EdgeInsets.all(0),
+              //   child: Row(
+              //     children: <Widget>[
+              //       Expanded(child: _stateType()),
+              //       SizedBox(width: 5),
+              //       Expanded(child: _cityType())
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: screenSize * 0.02,
               ),
@@ -205,6 +202,9 @@ class _DashBoardState extends State<DashBoard> {
       style: TextStyle(color: Colors.black),
       validator: (input) {
         return input.isEmpty ? 'Name is required' : null;
+      },
+      onChanged: (value) {
+        _bName = value;
       },
       onSaved: (input) => _bName = input,
     );
@@ -263,90 +263,90 @@ class _DashBoardState extends State<DashBoard> {
 
   // STATE DROP DOWN BUTTON
 
-  Widget _stateType() {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.cyan, width: 2),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30)),
-      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
-      child: DropdownButton<String>(
-        isExpanded: true,
-        hint: Text('State'),
-        value: stateDropdownValue,
-        underline: Container(height: 0, color: Colors.white),
-        icon: Icon(
-          Icons.arrow_drop_down,
-          color: Colors.cyan,
-        ),
-        iconSize: 25,
-        elevation: 10,
-        style: TextStyle(fontSize: 18, color: Colors.black),
-        onChanged: (String newValue) {
-          setState(() {
-            stateDropdownValue = newValue;
-            _state = newValue;
-          });
-        },
-        items: <String>['Business', 'One', 'Two', 'Free', 'Four']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-    );
-  }
+  // Widget _stateType() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //         border: Border.all(color: Colors.cyan, width: 2),
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.circular(30)),
+  //     padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+  //     child: DropdownButton<String>(
+  //       isExpanded: true,
+  //       hint: Text('State'),
+  //       value: stateDropdownValue,
+  //       underline: Container(height: 0, color: Colors.white),
+  //       icon: Icon(
+  //         Icons.arrow_drop_down,
+  //         color: Colors.cyan,
+  //       ),
+  //       iconSize: 25,
+  //       elevation: 10,
+  //       style: TextStyle(fontSize: 18, color: Colors.black),
+  //       onChanged: (String newValue) {
+  //         setState(() {
+  //           stateDropdownValue = newValue;
+  //           _state = newValue;
+  //         });
+  //       },
+  //       items: <String>['Business', 'One', 'Two', 'Free', 'Four']
+  //           .map<DropdownMenuItem<String>>((String value) {
+  //         return DropdownMenuItem<String>(
+  //           value: value,
+  //           child: Text(value),
+  //         );
+  //       }).toList(),
+  //     ),
+  //   );
+  // }
 
   // CITY DROP DOWN MWNU BUTTON
 
-  Widget _cityType() {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.cyan, width: 2),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30)),
-      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
-      child: DropdownButton<String>(
-        isExpanded: true,
-        hint: Text('City'),
-        value: cityDropdownValue,
-        underline: Container(height: 0, color: Colors.white),
-        icon: Icon(
-          Icons.arrow_drop_down,
-          color: Colors.cyan,
-        ),
-        iconSize: 25,
-        elevation: 10,
-        style: TextStyle(fontSize: 18, color: Colors.black),
-        onChanged: (String newValue) {
-          setState(() {
-            cityDropdownValue = newValue;
-            _city = newValue;
-          });
-        },
-        items: <String>[
-          "FOOD",
-          "HEALTHCARE",
-          "HOME SERVICES",
-          "RETAIL",
-          "INDIVIDUAL SERVICES",
-          "EDUCATION",
-          "OTHER"
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-    );
-  }
+  // Widget _cityType() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //         border: Border.all(color: Colors.cyan, width: 2),
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.circular(30)),
+  //     padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+  //     child: DropdownButton<String>(
+  //       isExpanded: true,
+  //       hint: Text('City'),
+  //       value: cityDropdownValue,
+  //       underline: Container(height: 0, color: Colors.white),
+  //       icon: Icon(
+  //         Icons.arrow_drop_down,
+  //         color: Colors.cyan,
+  //       ),
+  //       iconSize: 25,
+  //       elevation: 10,
+  //       style: TextStyle(fontSize: 18, color: Colors.black),
+  //       onChanged: (String newValue) {
+  //         setState(() {
+  //           cityDropdownValue = newValue;
+  //           _city = newValue;
+  //         });
+  //       },
+  //       items: <String>[
+  //         "FOOD",
+  //         "HEALTHCARE",
+  //         "HOME SERVICES",
+  //         "RETAIL",
+  //         "INDIVIDUAL SERVICES",
+  //         "EDUCATION",
+  //         "OTHER"
+  //       ].map<DropdownMenuItem<String>>((String value) {
+  //         return DropdownMenuItem<String>(
+  //           value: value,
+  //           child: Text(value),
+  //         );
+  //       }).toList(),
+  //     ),
+  //   );
+  // }
 
   // EMAIL INPUT FIELD
 
-    Widget _emailDisplay() {
+  Widget _emailDisplay() {
     return Container(
       // alignment: Alignment.topCenter,
       height: screenSize * 0.07,
@@ -356,9 +356,18 @@ class _DashBoardState extends State<DashBoard> {
           borderRadius: BorderRadius.circular(30)),
       child: ListTile(
         contentPadding: EdgeInsets.fromLTRB(5, 0, 10, 5),
-        leading: Icon(Icons.verified_user, color: Colors.green,),
-              title: Text( _email,style: TextStyle(color: Colors.black, fontSize: 16,),),
-              trailing: Icon(Icons.mail, color: Colors.cyan),
+        leading: Icon(
+          Icons.verified_user,
+          color: Colors.green,
+        ),
+        title: Text(
+          _email,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
+        trailing: Icon(Icons.mail, color: Colors.cyan),
       ),
     );
   }
@@ -373,11 +382,20 @@ class _DashBoardState extends State<DashBoard> {
           border: Border.all(color: Colors.cyan, width: 2),
           color: Colors.white,
           borderRadius: BorderRadius.circular(30)),
-      child:ListTile(
+      child: ListTile(
         contentPadding: EdgeInsets.fromLTRB(5, 0, 10, 5),
-        leading: Icon(Icons.verified_user, color: Colors.green,),
-              title: Text( _phoneNumber.replaceFirst('+91', ''),style: TextStyle(color: Colors.black, fontSize: 16,),),
-              trailing: Icon(Icons.phone_android, color: Colors.cyan),
+        leading: Icon(
+          Icons.verified_user,
+          color: Colors.green,
+        ),
+        title: Text(
+          _phoneNumber.replaceFirst('+91', ''),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
+        trailing: Icon(Icons.phone_android, color: Colors.cyan),
       ),
     );
   }
@@ -391,12 +409,17 @@ class _DashBoardState extends State<DashBoard> {
       isExtended: true,
       elevation: 10,
       onPressed: () {
-        _save();
+        setState(() {
+          _isRegistered = false;
+        });
+        Future.delayed(Duration(seconds: 3), () {
+          _save();
+        });
       },
       label: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child:
-            Text('Submit', style: TextStyle(color: Colors.cyan, fontSize: 18)),
+        child: Text('Register',
+            style: TextStyle(color: Colors.cyan, fontSize: 18)),
       ),
     );
   }
@@ -406,29 +429,94 @@ class _DashBoardState extends State<DashBoard> {
   void _save() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-    }
-    ;
-    if (_bType == '' || _city == '' || _state == '') {
-      showerror();
-    }
-    if (_bName.isNotEmpty &&
-        _bType.isNotEmpty &&
-        _state.isNotEmpty &&
-        _city.isNotEmpty &&
-        _email.isNotEmpty &&
-        _phoneNumber.isNotEmpty) {
-      if (_userType == UserType.Business) {
-        BUser(this._bName, this._bType, this._state, this._city, this._email,
-            this._phoneNumber);
+      if (_bName.isNotEmpty &&
+          _bType.isNotEmpty &&
+          _email.isNotEmpty &&
+          _phoneNumber.isNotEmpty) {
+        if (_userType == UserType.Business) {
+          BUser bUser =
+              BUser(this._bName, this._bType, this._email, this._phoneNumber);
+          List<String> bUserList = [
+            bUser.bName,
+            bUser.bType,
+            bUser.email,
+            bUser.phoneNumber
+          ];
+          storeBUser(bUserList);
+        }
+        if (_userType == UserType.Individual) {
+          IndUser indUser =
+              IndUser(this._bName, this._email, this._phoneNumber);
+          List<String> indUserList = [
+            indUser.name,
+            indUser.email,
+            indUser.phoneNumber
+          ];
+          storeIndUser(indUserList);
+        }
       }
-      if (_userType == UserType.Individual) {
-        IndUser(this._bName, this._state, this._city, this._email,
-            this._phoneNumber);
+      setState(() {
+        _isRegistered = true;
+      });
+      Navigator.of(context).pushReplacementNamed('/home');
+
+      if (_bType == '') {
+        showerror();
       }
+
       // await _databaseReference.push().set(contact.toJson());
     }
   }
 
+  // STORE DATA
+
+  storeBUser(List<String> bUser) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('bUser', bUser);
+  }
+
+  storeIndUser(List<String> indUser) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('indUser', indUser);
+  }
+
+  //  SHOW PROGESS
+
+  showProgress(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          if (_isRegistered == true) {
+            Navigator.of(context).pop();
+          }
+          return AlertDialog(
+            elevation: 5,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            content: Container(
+              alignment: Alignment.center,
+              height: screenSize * 0.3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.cyan,
+                  ),
+                  SizedBox(
+                    height: screenSize * 0.01,
+                  ),
+                  Text(
+                    message,
+                    style: TextStyle(color: Colors.cyan),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  //  SHOW ERROR DIALOG
   showerror() {
     showDialog(
         context: context,

@@ -9,6 +9,7 @@ import 'package:paymng/pages/HomePage.dart';
 import 'package:paymng/pages/LoginPage.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:flutter/services.dart' ;
 
 void main() {
   final store = Store<AppState>(appReducer,
@@ -23,14 +24,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]);
     return StoreProvider(
       store: store,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(),
-        home: LoginPage(), 
-        // AuthService().handleAuth(),
+        home: LoginPage(),
         routes: <String, WidgetBuilder>{
+          '/login': (BuildContext context) => LoginPage(),
           '/dash': (BuildContext context) => DashBoard(
             onInit: (){
               StoreProvider.of<AppState>(context).dispatch(getEmailPhoneAction);
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
           ),
           '/home': (BuildContext context) => HomePage(
             onInit: (){
-              // StoreProvider.of<AppState>(context).dispatch(getUserAction);
+              StoreProvider.of<AppState>(context).dispatch(getUserProfileAction);
             }
           ),
         },

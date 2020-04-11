@@ -61,6 +61,7 @@ flutter:
     - asset/searchpng.com-phonepe-icon.png
     - asset/google pay.png
     - asset/Logo.jpeg
+    - asset/cities.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -56,9 +56,9 @@ class _LoginPageState extends State<LoginPage>
           codeAutoRetrievalTimeout: autoTimeout);
       _storeUserNumber(_phoneNo);
       setState(() {
-         _numVerified = true;
+        _numVerified = true;
       });
-     
+
       print(_phoneNo);
     } catch (e) {
       Future.delayed(Duration(seconds: 2), () {
@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage>
                   Expanded(
                     flex: 1,
                     child: Container(
-                       margin: EdgeInsets.only(top:20),
+                      margin: EdgeInsets.only(top: 20),
                       height: 30,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -198,7 +198,7 @@ class _LoginPageState extends State<LoginPage>
                   Expanded(
                     flex: 3,
                     child: Column(
-                       crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         _phoneInput(),
                         SizedBox(height: screenSize * 0.05),
@@ -216,12 +216,12 @@ class _LoginPageState extends State<LoginPage>
 //  GOOGLE LOGIN BUTTON
               Opacity(
                 opacity: _numVerified == true ? 1 : 0.4,
-                              child: Row(
+                child: Row(
                   children: <Widget>[
                     Expanded(
                       flex: 1,
                       child: Container(
-                        margin: EdgeInsets.only(top:10),
+                        margin: EdgeInsets.only(top: 10),
                         height: 30,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -289,24 +289,27 @@ class _LoginPageState extends State<LoginPage>
 
   Widget _phoneLoginButton(dynamic phoneNumber) {
     return OutlineButton(
-        padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-        borderSide: BorderSide(color: Colors.cyan, width: 2),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        splashColor: Colors.cyan,
-        highlightedBorderColor: Colors.cyan,
-        color: Colors.white,
-        child: Text('Verify', style: TextStyle( color: Colors.cyan, fontSize: 18, fontWeight: FontWeight.bold),),
-        onPressed: () {
-          if(_formKey.currentState.validate()){
-            Future.delayed(Duration(seconds: 2), (){
-              _verifyPhone(phoneNumber);
-            });
-            // if((_numVerified == false)){
-            //   showProgress('Verifying Number');
-            // }
-          }
-          
-        }, 
+      padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
+      borderSide: BorderSide(color: Colors.cyan, width: 2),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      splashColor: Colors.cyan,
+      highlightedBorderColor: Colors.cyan,
+      color: Colors.white,
+      child: Text(
+        'Verify',
+        style: TextStyle(
+            color: Colors.cyan, fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      onPressed: () {
+        if (_formKey.currentState.validate()) {
+          Future.delayed(Duration(seconds: 2), () {
+            _verifyPhone(phoneNumber);
+          });
+          // if((_numVerified == false)){
+          //   showProgress('Verifying Number');
+          // }
+        }
+      },
     );
   }
 
@@ -322,7 +325,7 @@ class _LoginPageState extends State<LoginPage>
         darkMode: false,
         onPressed: () {
           _numVerified == true ? _signInWithGoogle() : null;
-          if(_emailVerified == false){
+          if (_emailVerified == false) {
             showProgress('Sigining In');
           }
         },
@@ -332,34 +335,41 @@ class _LoginPageState extends State<LoginPage>
 
   // SHOW PROGRESS
 
-  showProgress(String message){
+  showProgress(String message) {
     showDialog(
-      context: context,
-      builder: (BuildContext context){
-        if(message == 'Verifying Number' && _numVerified == true){
-          Navigator.pop(context);
-        }
-        if(message == 'Sigining In' && _emailVerified == true){
-          Navigator.of(context).pop();
-        }
-        return AlertDialog(
-          elevation: 5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        context: context,
+        builder: (BuildContext context) {
+          if (message == 'Verifying Number' && _numVerified == true) {
+            Navigator.pop(context);
+          }
+          if (message == 'Sigining In' && _emailVerified == true) {
+            Navigator.of(context).pop();
+          }
+          return AlertDialog(
+            elevation: 5,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             content: Container(
               alignment: Alignment.center,
               height: screenSize * 0.3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CircularProgressIndicator(backgroundColor: Colors.cyan,),
-                  SizedBox(height: screenSize*0.01,),
-                  Text(message, style: TextStyle(color: Colors.cyan),)
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.cyan,
+                  ),
+                  SizedBox(
+                    height: screenSize * 0.01,
+                  ),
+                  Text(
+                    message,
+                    style: TextStyle(color: Colors.cyan),
+                  )
                 ],
               ),
             ),
-        );
-      }
-    );
+          );
+        });
   }
 
   // ERROR WIDGET
