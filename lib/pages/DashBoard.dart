@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:paymng/arch/models/BusinessUser.dart';
 import 'package:paymng/arch/models/IndividualUser.dart';
 import 'package:paymng/arch/models/appState.dart';
-import 'package:paymng/arch/redux/actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum UserType { Business, Individual }

@@ -29,7 +29,9 @@ class MyApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(),
+        theme: ThemeData(
+           visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
         home: LoginPage(),
         routes: <String, WidgetBuilder>{
           '/login': (BuildContext context) => LoginPage(),

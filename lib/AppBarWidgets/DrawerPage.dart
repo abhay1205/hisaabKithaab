@@ -129,9 +129,9 @@ class DrawerPage extends StatelessWidget {
           _phoneNumber = state.bUser.phoneNumber.toString(); 
         }
         else{
-          _bName = state.indUser.name;
-          _email = state.indUser.email;
-          _phoneNumber = state.indUser.phoneNumber;
+          _bName = state.indUser.name.toString();
+          _email = state.indUser.email.toString();
+          _phoneNumber = state.indUser.phoneNumber.toString();
         }
         return Drawer(
           child: Container(
